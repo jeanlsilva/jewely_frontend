@@ -1,1 +1,1 @@
-# jewely_frontend
+# Jewely
