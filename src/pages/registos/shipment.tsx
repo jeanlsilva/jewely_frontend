@@ -34,6 +34,7 @@ import { useRouter } from "next/dist/client/router";
 import { GetServerSideProps } from "next";
 import { useUsers } from "../../services/hooks/useUsers";
 import { RiAddLine } from "react-icons/ri";
+import { FiMinus, FiPlus } from "react-icons/fi";
 import { FormItem } from "../../components/Form/FormItem";
 import { useRef } from "react";
 import { useEffect } from "react";
@@ -94,15 +95,16 @@ export default function Shipment(){
         reference,
         quantity,
       }])
-    } else {
-      setItemList(itemList)
     }
   }, [itemList])
 
   const handleSave = () => {
+    setItemList(itemList)
     for (const item of itemList) {
-      console.log(`cadastrar item ref #${item.reference}`)
+      item.reference != '' &&
+      console.log(item)
     }
+    console.log({reference, quantity})
   }
 
   const handleAddItem = () => {
@@ -111,6 +113,11 @@ export default function Shipment(){
       quantity,
     }])
     setReference('')
+  }
+
+  const handleRemoveItem = (itemReference: string) => {
+    const list = itemList.filter(item => item.reference != itemReference)
+    setItemList(list)       
   }
 
   const handleRegisterRef = data => {
@@ -160,16 +167,28 @@ export default function Shipment(){
                           registerRef={data => handleRegisterRef(data)} 
                           registerQt={data => handleRegisterQt(data)} 
                         />
-                        <Link href="#" passHref>
-                          <Button as="a"
-                            size="md"
-                            mt="8"
-                            width="10"
-                            colorScheme="pink"
-                            onClick={handleAddItem}
-                          >
-                            <Icon as={RiAddLine} fontSize="20"/></Button>
-                        </Link>                                                          
+                        <Flex justify="space-around">
+                          <Link href="#" passHref>
+                            <Button as="a"
+                              size="md"
+                              mt="8"
+                              width="10"
+                              colorScheme="pink"
+                              onClick={handleAddItem}
+                            >
+                              <Icon as={RiAddLine} fontSize="20"/></Button>
+                          </Link>
+                          <Link href="#" passHref>
+                            <Button as="a"
+                              size="md"
+                              mt="8"
+                              width="10"
+                              colorScheme="pink"
+                              onClick={() => handleRemoveItem(item.reference)}
+                            >
+                              <Icon as={FiMinus} fontSize="20"/></Button>
+                          </Link> 
+                        </Flex>
                       </SimpleGrid>
                     ))
                   }

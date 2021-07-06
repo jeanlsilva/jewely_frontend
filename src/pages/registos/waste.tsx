@@ -60,7 +60,7 @@ const createShipmentFormSchema = yup.object().shape({
   reference: yup.string().required('Campo obrigatório')
 })
 
-export default function Shipment(){
+export default function Waste(){
   const [itemList, setItemList] = useState([] as Item[])
   const [reference, setReference] = useState('')
   const [name, setName] = useState('')

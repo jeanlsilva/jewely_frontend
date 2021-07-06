@@ -1,5 +1,6 @@
 import { Input } from './Input';
 import {
+    Flex,
     FormControl,
     FormLabel,
     NumberInput,
