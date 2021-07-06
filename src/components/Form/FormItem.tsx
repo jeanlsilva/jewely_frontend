@@ -82,14 +82,14 @@ export const FormItem = ({ registerRef, registerQt, registerName }: FormItemProp
             handleChange(Number(target.value))
           }}
         >
-            <FormLabel>Quantidade</FormLabel>
-            <NumberInput defaultValue={quantity} min={1}>
-              <NumberInputField />
-              <NumberInputStepper>
-                <NumberIncrementStepper onClick={increment} />
-                <NumberDecrementStepper onClick={decrement} />
-              </NumberInputStepper>
-            </NumberInput>
+          <FormLabel>Quantidade</FormLabel>
+          <NumberInput defaultValue={quantity} min={1}>
+            <NumberInputField />
+            <NumberInputStepper>
+              <NumberIncrementStepper onClick={increment} />
+              <NumberDecrementStepper onClick={decrement} />
+            </NumberInputStepper>
+          </NumberInput>
         </FormControl>
       </>
     );
