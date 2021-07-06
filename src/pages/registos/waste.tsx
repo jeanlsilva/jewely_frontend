@@ -37,6 +37,7 @@ import { RiAddLine } from "react-icons/ri";
 import { FormItem } from "../../components/Form/FormItem";
 import { useRef } from "react";
 import { useEffect } from "react";
+import { FiMinus } from "react-icons/fi";
 
 type CreateShipmentFormData = {
   reference: string;
@@ -45,6 +46,7 @@ type CreateShipmentFormData = {
 
 interface Item {
   reference: string;
+  name: string;
   quantity: number;
 }
 
@@ -66,6 +68,7 @@ export default function Waste(){
   const [name, setName] = useState('')
   const [quantity, setQuantity] = useState(1)
   const [userData, setUserData] = useState([])
+  const workerRef = useRef(null);
 
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(createShipmentFormSchema)
@@ -93,25 +96,39 @@ export default function Waste(){
     if (itemList.length < 1) {
       setItemList([{
         reference,
+        name,
         quantity,
       }])
-    } else {
-      setItemList(itemList)
     }
   }, [itemList])
 
   const handleSave = () => {
+    const results = [];
+    setItemList(itemList)
     for (const item of itemList) {
-      console.log(`cadastrar item ref #${item.reference}`)
+      item.reference != '' &&
+      results.push(item)
     }
+    results.push({
+      reference,
+      name,
+      quantity
+    })
+    console.log(results, workerRef.current.value)
   }
 
   const handleAddItem = () => {
     setItemList([...itemList, {
       reference,
+      name,
       quantity,
     }])
     setReference('')
+  }
+
+  const handleRemoveItem = (itemReference: string) => {
+    const list = itemList.filter(item => item.reference != itemReference)
+    setItemList(list)       
   }
 
   const handleRegisterRef = data => {
@@ -166,16 +183,28 @@ export default function Waste(){
                           registerName={data => handleRegisterName(data)}
                           registerQt={data => handleRegisterQt(data)} 
                         />
-                        <Link href="#" passHref>
-                          <Button as="a"
-                            size="md"
-                            mt="8"
-                            width="10"
-                            colorScheme="pink"
-                            onClick={handleAddItem}
-                          >
-                            <Icon as={RiAddLine} fontSize="20"/></Button>
-                        </Link>                                                          
+                        <Flex justify="space-around">
+                          <Link href="#" passHref>
+                            <Button as="a"
+                              size="md"
+                              mt="8"
+                              width="10"
+                              colorScheme="pink"
+                              onClick={handleAddItem}
+                            >
+                              <Icon as={RiAddLine} fontSize="20"/></Button>
+                          </Link>
+                          <Link href="#" passHref>
+                            <Button as="a"
+                              size="md"
+                              mt="8"
+                              width="10"
+                              colorScheme="pink"
+                              onClick={() => handleRemoveItem(item.reference)}
+                            >
+                              <Icon as={FiMinus} fontSize="20"/></Button>
+                          </Link>                                                          
+                        </Flex>                        
                       </SimpleGrid>
                     ))
                   }
@@ -185,7 +214,7 @@ export default function Waste(){
                     <FormControl id="artesão" >
                       <FormLabel>Artesão</FormLabel>
                       
-                      <Select placeholder="Escolha Artesão">
+                      <Select ref={workerRef} placeholder="Escolha Artesão">
                       { 
                         userData.map(user => user.cargo == 'artesao' && <option key={user.id}>{user.name}</option>) 
                       }

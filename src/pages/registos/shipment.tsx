@@ -66,6 +66,7 @@ export default function Shipment(){
   const [reference, setReference] = useState('')
   const [quantity, setQuantity] = useState(1)
   const [userData, setUserData] = useState([])
+  const workerRef = useRef(null);
 
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(createShipmentFormSchema)
@@ -99,12 +100,17 @@ export default function Shipment(){
   }, [itemList])
 
   const handleSave = () => {
+    const results = [];
     setItemList(itemList)
     for (const item of itemList) {
       item.reference != '' &&
-      console.log(item)
+      results.push(item)
     }
-    console.log({reference, quantity})
+    results.push({
+      reference,
+      quantity
+    })
+    console.log(results, workerRef.current.value)
   }
 
   const handleAddItem = () => {
@@ -198,7 +204,7 @@ export default function Shipment(){
                     <FormControl id="artesão" >
                       <FormLabel>Artesão</FormLabel>
                       
-                      <Select placeholder="Escolha Artesão">
+                      <Select ref={workerRef} placeholder="Escolha Artesão">
                       { 
                         userData.map(user => user.cargo == 'artesao' && <option key={user.id}>{user.name}</option>) 
                       }
