@@ -29,13 +29,13 @@ export function SidebarNav(){
       <NavSection title="REGISTOS">
         <NavLink icon={RiDraftLine} href="/registos/compra">Registar Compra</NavLink>
         <NavLink icon={RiArticleLine} href="/registos/vendas">Registar Venda</NavLink>
-        <NavLink icon={RiSendPlane2Line} href="/registos/envio">Registar Envio</NavLink>
+        <NavLink icon={RiSendPlane2Line} href="/registos/shipment">Registar Envio</NavLink>
       </NavSection>
       {/* </Can>
       <Can roles={['artesao']}> */}
       <NavSection title="REGISTOS">
-        <NavLink icon={RiSendPlane2Line} href="/registos/send">Registar Envio</NavLink>
-        <NavLink icon={RiSendPlane2Line} href="/registos/desperdicio">Registar Desperdicio</NavLink>
+        <NavLink icon={RiSendPlane2Line} href="/registos/receipt">Registar Recebimento</NavLink>
+        <NavLink icon={RiSendPlane2Line} href="/registos/waste">Registar Desperdicio</NavLink>
       </NavSection>
       {/* </Can> */}
       <NavSection title="ARTESÂO X">

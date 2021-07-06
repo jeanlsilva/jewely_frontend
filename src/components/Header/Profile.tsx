@@ -9,7 +9,7 @@ interface ProfileProps {
 export function Profile({ showProfileData = true }: ProfileProps) {
   const { user } = useContext(AuthContext)
   
-  console.log(user)
+  // console.log(user)
 
   return (
     <Flex align="center">
