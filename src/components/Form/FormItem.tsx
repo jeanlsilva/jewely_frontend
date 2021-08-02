@@ -1,6 +1,5 @@
 import { Input } from './Input';
 import {
-    Flex,
     FormControl,
     FormLabel,
     NumberInput,
@@ -10,43 +9,28 @@ import {
     NumberDecrementStepper,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
-import { isError } from 'react-query';
-import { useEffect } from 'react';
+import { ChangeEvent, ChangeEventHandler, FormEvent, MutableRefObject, Ref, useState } from 'react';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-interface Item {
-  reference: string;
-  name?: string;
-  quantity: number;
-}
-
 interface FormItemProps {
-  registerRef: (data: string) => void;
-  registerQt: (data: number) => void;
-  registerName?: (data: string) => void;
+  referenceRef: Ref<HTMLInputElement>
+  quantityRef: Ref<HTMLInputElement>
+  nameRef?: Ref<HTMLInputElement>
+  registerRef: (data: string) => void
 }
 
 const createShipmentFormSchema = yup.object().shape({
   reference: yup.string().required('Campo obrigatório')
 })
 
-export const FormItem = ({ registerRef, registerQt, registerName }: FormItemProps) => {
+export const FormItem = ({ referenceRef, quantityRef, nameRef, registerRef }: FormItemProps) => {
     const { formState, register } = useForm({
       resolver: yupResolver(createShipmentFormSchema)
     });
     const [quantity, setQuantity] = useState(1)
 
     const { errors } = formState;
-
-    useEffect(() => {
-      registerQt(quantity)
-    }, [quantity])
-
-    const handleChange = e => {
-      setQuantity(e)
-    }
 
     const increment = () => {
       setQuantity(quantity + 1)
@@ -55,21 +39,27 @@ export const FormItem = ({ registerRef, registerQt, registerName }: FormItemProp
     const decrement = () => {
       setQuantity(quantity - 1)
     }
+
+    const handleRegisterRef = (e: ChangeEvent<HTMLInputElement>) => {
+      registerRef(e.target.value)
+    }
+    
     return (
       <>
         <Input
           name="ref"
           label="Referência"
           {...register("ref")}
-          onChange={e => registerRef(e.target.value)}
+          ref = {referenceRef}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => handleRegisterRef(e)}
         />
         {
-          registerName && (
+          nameRef && (
             <Input
               name="name"
               label="Nome do Material"
               {...register("name")}
-              onChange={e => registerName(e.target.value)}
+              ref = {nameRef}
             />
           ) 
         }
@@ -77,15 +67,11 @@ export const FormItem = ({ registerRef, registerQt, registerName }: FormItemProp
           id="quantidade" 
           label="Quantidade"
           error={errors.qtd}
-          {...register("qtd")}
-          onChange={e => {
-            const target = e.target as HTMLInputElement
-            handleChange(Number(target.value))
-          }}
+          {...register("qtd")}          
         >
           <FormLabel>Quantidade</FormLabel>
           <NumberInput defaultValue={quantity} min={1}>
-            <NumberInputField />
+            <NumberInputField ref = {quantityRef} />
             <NumberInputStepper>
               <NumberIncrementStepper onClick={increment} />
               <NumberDecrementStepper onClick={decrement} />
